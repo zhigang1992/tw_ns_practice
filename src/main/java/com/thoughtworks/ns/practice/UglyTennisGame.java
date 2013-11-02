@@ -1,5 +1,7 @@
 package com.thoughtworks.ns.practice;
 
+import static java.lang.String.format;
+
 public class UglyTennisGame implements TennisGame {
     public int P1point = 0;
     public int P2point = 0;
@@ -81,21 +83,21 @@ public class UglyTennisGame implements TennisGame {
 
         if (P1point > P2point && P2point >= 3)
         {
-            score = "Advantage player1";
+            score = format("Advantage %s", player1Name);
         }
 
         if (P2point > P1point && P1point >= 3)
         {
-            score = "Advantage player2";
+            score = format("Advantage %s", player2Name);
         }
 
         if (P1point>=4 && P2point>=0 && (P1point-P2point)>=2)
         {
-            score = "Win for player1";
+            score = format("Win for %s", player1Name);
         }
         if (P2point>=4 && P1point>=0 && (P2point-P1point)>=2)
         {
-            score = "Win for player2";
+            score = format("Win for %s", player2Name);
         }
         return score;
     }
@@ -127,7 +129,7 @@ public class UglyTennisGame implements TennisGame {
     }
 
     public void wonPoint(String player) {
-        if (player == "player1")
+        if (player.equals(player1Name))
             P1Score();
         else
             P2Score();
