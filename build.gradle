@@ -11,11 +11,10 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.guava:guava:14.0'
     testCompile 'junit:junit:4.11'
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.4'
+    gradleVersion = '1.8'
 }
 
