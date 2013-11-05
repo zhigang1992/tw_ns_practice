@@ -1,11 +1,9 @@
 package com.thoughtworks.ns.practice;
 
 public class UglyTennisGame implements TennisGame {
-    public int P1point = 0;
-    public int P2point = 0;
+    private int P1point = 0;
+    private int P2point = 0;
 
-    public String P1res = "";
-    public String P2res = "";
     private String player1Name;
     private String player2Name;
 
@@ -14,120 +12,72 @@ public class UglyTennisGame implements TennisGame {
         this.player2Name = player2Name;
     }
 
+    private String tennisTermForScore(int score){
+        String tennisTerm;
+        switch (score) {
+            case 0:{
+                tennisTerm = "Love";
+                break;
+            }
+            case 1:{
+                tennisTerm = "Fifteen";
+                break;
+            }
+            case 2:{
+                tennisTerm = "Thirty";
+                break;
+            }
+            case 3:{
+                tennisTerm = "Forty";
+                break;
+            }
+            default:{
+                tennisTerm = "";
+                break;
+            }
+        }
+        return tennisTerm;
+    }
+
     public String getScore(){
         String score = "";
-        if (P1point == P2point && P1point < 4)
-        {
-            if (P1point==0)
-                score = "Love";
-            if (P1point==1)
-                score = "Fifteen";
-            if (P1point==2)
-                score = "Thirty";
-            score += "-All";
-        }
-        if (P1point==P2point && P1point>=3)
-            score = "Deuce";
 
-        if (P1point > 0 && P2point==0)
-        {
-            if (P1point==1)
-                P1res = "Fifteen";
-            if (P1point==2)
-                P1res = "Thirty";
-            if (P1point==3)
-                P1res = "Forty";
+        int maxScore = Math.max(P1point, P2point);
+        int minScore = Math.min(P1point, P2point);
+        int scoreDifference = maxScore - minScore;
 
-            P2res = "Love";
-            score = P1res + "-" + P2res;
-        }
-        if (P2point > 0 && P1point==0)
-        {
-            if (P2point==1)
-                P2res = "Fifteen";
-            if (P2point==2)
-                P2res = "Thirty";
-            if (P2point==3)
-                P2res = "Forty";
+        String advancedPlayerName = P1point > P2point ? this.player1Name : this.player2Name;
 
-            P1res = "Love";
-            score = P1res + "-" + P2res;
+        if (maxScore >= 4 && scoreDifference >= 2) {
+            //We have a winner
+            score = "Win for " + advancedPlayerName;
+        } else if (minScore >= 3) {
+            if (scoreDifference == 0) {
+                //Deuce
+                score = "Deuce";
+            } else {
+                //Advantage
+                score = "Advantage " + advancedPlayerName;
+            }
+        } else if (scoreDifference == 0) {
+            score = tennisTermForScore(maxScore) + "-All";
+        } else {
+            score = tennisTermForScore(P1point) + "-" + tennisTermForScore(P2point);
         }
 
-        if (P1point>P2point && P1point < 4)
-        {
-            if (P1point==2)
-                P1res="Thirty";
-            if (P1point==3)
-                P1res="Forty";
-            if (P2point==1)
-                P2res="Fifteen";
-            if (P2point==2)
-                P2res="Thirty";
-            score = P1res + "-" + P2res;
-        }
-        if (P2point>P1point && P2point < 4)
-        {
-            if (P2point==2)
-                P2res="Thirty";
-            if (P2point==3)
-                P2res="Forty";
-            if (P1point==1)
-                P1res="Fifteen";
-            if (P1point==2)
-                P1res="Thirty";
-            score = P1res + "-" + P2res;
-        }
-
-        if (P1point > P2point && P2point >= 3)
-        {
-            score = "Advantage player1";
-        }
-
-        if (P2point > P1point && P1point >= 3)
-        {
-            score = "Advantage player2";
-        }
-
-        if (P1point>=4 && P2point>=0 && (P1point-P2point)>=2)
-        {
-            score = "Win for player1";
-        }
-        if (P2point>=4 && P1point>=0 && (P2point-P1point)>=2)
-        {
-            score = "Win for player2";
-        }
         return score;
     }
 
-    public void SetP1Score(int number){
-
-        for (int i = 0; i < number; i++)
-        {
-            P1Score();
-        }
-
-    }
-
-    public void SetP2Score(int number){
-
-        for (int i = 0; i < number; i++)
-        {
-            P2Score();
-        }
-
-    }
-
-    public void P1Score(){
+    private void P1Score(){
         P1point++;
     }
 
-    public void P2Score(){
+    private void P2Score(){
         P2point++;
     }
 
     public void wonPoint(String player) {
-        if (player == "player1")
+        if (player.equals(this.player1Name))
             P1Score();
         else
             P2Score();
